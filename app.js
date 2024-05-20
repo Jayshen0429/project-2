@@ -1,0 +1,44 @@
+let list = document.querySelector('.slider .slist');
+let items = document.querySelectorAll('.slider .slist .item');
+let dots = document.querySelectorAll('.slider .dots li');
+let prev = document.getElementById('prev');
+let next = document.getElementById('next');
+
+let active = 0;
+let lengthItems = items.length - 1;
+
+next.onclick = function() {
+    if (active + 1 > lengthItems) {
+        active = 0;
+    } else {
+        active = active + 1;
+    }
+    reloadSlider();
+}
+prev.onclick = function() {
+    if (active - 1 < 0) {
+        active = lengthItems;
+    } else {
+        active = active - 1;
+    }
+    reloadSlider();
+}
+
+let refreshSlider = setInterval(()=> {next.click()},3000);
+function reloadSlider() {
+    let checkLeft = items[active].offsetLeft;
+    list.style.left = -checkLeft + 'px';
+
+    let lastActiveDot = document.querySelector('.slider .dots li.dactive');
+    lastActiveDot.classList.remove('dactive');
+    dots[active].classList.add('dactive');
+    clearInterval(refreshSlider);
+    refreshSlider = setInterval(() => {next.click()},3000);
+}
+dots.forEach((li, key) => {
+    li.addEventListner('click', function(){
+        active = key;
+        reloadSlider();
+    })
+})
+
